@@ -57,9 +57,16 @@
       border-bottom: solid 2px #EBEBEB
     }
 
-    #card th,
     #card td {
       border: solid 1px #BCBCBC;
+    }
+
+    #card thead td {
+      background-color: #EBEBEB;
+    }
+
+    #card tbody td {
+      background-color: #FFFFFF;
     }
 
     input {
@@ -84,7 +91,8 @@
     <div class="ui-layout-container">
       <div class="ui-section-header__layout ui-layout-flex">
         <!-- LOGO -->
-        <a href="https://github.com/RekoGit/to-81-web" rel="noreferrer noopener" target="_blank" role="link" aria-label="#">
+        <a href="https://github.com/RekoGit/to-81-web" rel="noreferrer noopener" target="_blank" role="link"
+          aria-label="#">
           <svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
             x="0px" y="0px" viewBox="0 0 512 512" style="width: 32px; height: 32px; opacity: 1;" xml:space="preserve">
             <style type="text/css">
@@ -129,8 +137,8 @@
     <section class="ui-section-hero">
       <div class="ui-layout-container">
         <div class="ui-layout-column-6 ui-layout-column-center">
-          <h1>対戦表作成</h1>
-          <a class="ui-text-intro">メンバーのレートに応じて対局カードを作成するだけのページです。入力された内容はブラウザに保存されます。履歴を削除したいときは<span
+          <h1>星取表作成</h1>
+          <a class="ui-text-intro">入力された名前に応じて対局カードを作成するだけのページです。入力された内容はブラウザに保存されます。履歴を削除したいときは<span
               id="clear_history">ここ</span>をクリックしてください。</a>
         </div>
       </div>
@@ -174,8 +182,8 @@
           </div>
 
           <p class="ui-text-intro">参加者の一覧を入力してボタンを押してください
-            <span id="create_card"
-              class="ui-component-button ui-component-button-small ui-component-button-primary">対戦表作成</span>
+            <a href="javascript:void(0)" id="create_card"
+              class="ui-component-button ui-component-button-small ui-component-button-primary">星取表作成</a>
           </p>
 
         </div>
@@ -185,23 +193,17 @@
     <section class="ui-section-testimonial">
       <div class="ui-layout-container">
         <div class="ui-layout-column-8 ui-layout-column-center">
-          <h2>対戦表</h2>
-          <p id="info" class="ui-text-intro"></p>
+          <h2>星取表</h2>
+          <span id="info" class="ui-text-intro">?をクリックして対局結果を入力できます</span>
+          <div class="ui-layout-flex ui-component-button-small">
+            <span id="info" class="">クリップボードからGoogleSpreadsheetに貼り付ける場合は<br>貼り付け後に[テキストを列に分割]を選択してください。</span>&nbsp;
+            <a href="javascript:void(0)" id="copy_card"
+              class="ui-component-button ui-component-button-small ui-component-button-primary">クリップボードにコピー</a>&nbsp;
+            <a href="javascript:void(0)" id="copy_card_lite"
+              class="ui-component-button ui-component-button-small ui-component-button-primary">クリップボードにコピー(レート/勝敗を含まない)</a>
+          </div>
           <table id="card" class="w-100 text-center">
             <thead>
-              <tr>
-                <th rowspan="2">回</th>
-                <th colspan="2">先手</th>
-                <th colspan="2">後手</th>
-                <th rowspan="2">手合</th>
-                <th rowspan="2">(先手の)勝敗</th>
-              </tr>
-              <tr>
-                <th>名前</th>
-                <th>R</th>
-                <th>名前</th>
-                <th>R</th>
-              </tr>
             </thead>
             <tbody>
             </tbody>
@@ -219,15 +221,14 @@
       </div>
     </div>
   </footer>
-  <!-- <script src="https://code.jquery.com/jquery-3.5.0.min.js"
-    integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script> -->
   <script>
     const STORAGE_MEMBERS = 'MEMBERS';
     const ROUND_TO_BREAK = 'ROUND_TO_BREAK';
 
     let stored_members = {};
     let table_members = document.querySelector('#members tbody');
-    let table_card = document.querySelector('#card tbody');
+    let table_head = document.querySelector('#card thead');
+    let table_body = document.querySelector('#card tbody');
 
     const add_row = () => {
       let row = document.createElement('tr');
@@ -243,10 +244,61 @@
       row.appendChild(col2);
       table_members.appendChild(row);
     }
+
     const add_rows = (num) => {
       for (let i = 0; i < num; i++) {
         add_row()
       }
+    }
+
+    const copy_card = () => {
+      copy_card_to_clipboard(false);
+    }
+
+    const copy_card_lite = () => {
+      copy_card_to_clipboard(true);
+    }
+
+    const copy_card_to_clipboard = (lite) => {
+      let data;
+      let separator = ',';
+      let rows = document.querySelectorAll("#card tr[id^='me']");
+      // Construct csv
+      let csv = [];
+      for (let i = 0; i < rows.length; i++) {
+        let row = [], cols = rows[i].querySelectorAll('td, th');
+        for (let j = 0; j < cols.length; j++) {
+          if (lite) {
+            if (j >= 1 && j <= 3) {
+              continue;
+            }
+          }
+          // Clean innertext to remove multiple spaces and jumpline (break csv)
+          if (lite) {
+            data = cols[j].innerText.replace(/(\r\n|\n|\r|\?|\○|\●)/gm, '').replace(/(\s\s)/gm, ' ');
+          } else {
+            data = cols[j].innerText.replace(/(\r\n|\n|\r|\?)/gm, '').replace(/(\s\s)/gm, ' ');
+          }
+          // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+          data = data.replace(/"/g, '""');
+          // Push escaped string
+          row.push('"' + data + '"');
+        }
+        csv.push(row.join(separator));
+      }
+
+      navigator.permissions.query({ name: "clipboard-write" }).then((result) => {
+        if (result.state === "granted" || result.state === "prompt") {
+          /* write to the clipboard now */
+          navigator.clipboard.writeText(csv.join('\n')).then(() => {
+            /* clipboard successfully set */
+          }, () => {
+            /* clipboard write failed */
+            console.log('clipboard write failed')
+          });
+        }
+      });
+
     }
 
     const create_card = () => {
@@ -282,8 +334,7 @@
       localStorage.removeItem(STORAGE_MEMBERS);
       localStorage.setItem(STORAGE_MEMBERS, JSON.stringify(stored_members));
 
-      // 対戦表を初期化
-      table_card.innerHTML = '';
+
 
       // 参加者の数を取得
       num_members = Object.keys(stored_members).length;
@@ -299,6 +350,11 @@
       let games_per_round = (num_members + num_members % 2) / 2;
 
       let account_members;
+
+      // 星取表を初期化
+      let hositorihyo = {};
+      Object.keys(stored_members).forEach(account => hositorihyo[account] = []);
+
       let idx_gote;     //末尾からi番目を先頭からのインデックスに変換して格納
       // let aux_gote = true; 
       for (let i = 0; i < rounds; i++) {
@@ -326,37 +382,111 @@
             [sente, gote] = [gote, sente];
           }
 
-          // お休みの回は表に追加せず、メッセージを追加
-          if (gote == ROUND_TO_BREAK) {
-            info_break += `${i + 1}回戦 ${sente}(${stored_members[sente]})は先生と観戦<br>`
-          } else {
-            // 対局表
-            let row = document.createElement('tr');
-            let col1 = document.createElement('td');
-            let col2 = document.createElement('td');
-            let col3 = document.createElement('td');
-            let col4 = document.createElement('td');
-            let col5 = document.createElement('td');
-            let col6 = document.createElement('td');
-            let col7 = document.createElement('td');
-
-            col1.innerHTML = i + 1;
-            col2.innerHTML = sente;
-            col3.innerHTML = stored_members[sente];
-            col4.innerHTML = gote;
-            col5.innerHTML = stored_members[gote];
-            // row = document.createElement('tr');
-            [col1, col2, col3, col4, col5, col6, col7].forEach(col => row.appendChild(col));
-            table_card.appendChild(row);
-          }
+          // 星取表に格納
+          hositorihyo[sente].push(gote);
+          hositorihyo[gote].push(sente);
         }
       }
-      document.getElementById('info').innerHTML = info_break;
+      // document.getElementById('info').innerHTML = info_break;
+
+      // 星取表を初期化
+      table_head.innerHTML = '';
+      table_body.innerHTML = '';
+      let row;
+
+      // headerをセット
+      row = document.createElement('tr');
+      ['アカウント', 'レート', '勝', '負'].concat([...hositorihyo[sente]].map((_, i) => i + 1)).forEach(val => {
+        let col = document.createElement('td');
+        col.innerHTML = val;
+        row.appendChild(col);
+      });
+      table_head.appendChild(row);
+
+      // bodyをセット
+      let key_id = 'me_';
+      for (key in hositorihyo) {
+        if (key != ROUND_TO_BREAK) {
+          row = document.createElement('tr');
+          row.id = key_id + key;
+          [key, stored_members[key], '', ''].concat(hositorihyo[key]).forEach(val => {
+            let col = document.createElement('td');
+            if (val == ROUND_TO_BREAK) {
+              col.innerHTML = "-";
+            } else {
+              if (row.childElementCount >= 4) {
+                col.innerHTML = "<p>?</p>" + val;
+              } else {
+                col.innerHTML = val;
+              }
+            }
+            row.appendChild(col);
+          });
+          table_body.appendChild(row);
+        }
+      }
+
+      // 対局結果がクリックされた際の挙動を追加
+      let cols = document.querySelectorAll('#card tbody td p');
+      for (let i = 0; i < cols.length; i++) {
+        cols[i].addEventListener('click', function () {
+          console.log(this);
+          let my_row = this.parentElement.parentElement;
+          let opponent_id = key_id + this.parentElement.innerText.replace(/.\n\n/g, '');
+          let opponent_row = document.getElementById(opponent_id);
+          let me_in_opponent = document.evaluate("//tr[@id='" + opponent_id + "']//td[contains(text(), '" + my_row.children[0].innerText + "')]/p", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+
+          if (this.innerText == '●') {
+            // 自分の勝ち数を加算
+            this.innerText = '○';
+            my_row.children[2].innerText = Number(my_row.children[2].innerText) + 1;
+            my_row.children[3].innerText = Number(my_row.children[3].innerText) - 1;
+
+            // 相手の負け数を加算
+            me_in_opponent.innerText = '●'
+            opponent_row.children[2].innerText = Number(opponent_row.children[2].innerText) - 1;
+            opponent_row.children[3].innerText = Number(opponent_row.children[3].innerText) + 1;
+
+
+          } else if (this.innerText == '○') {
+            // 自分の負け数を加算
+            this.innerText = '●';
+            my_row.children[3].innerText = Number(my_row.children[3].innerText) + 1
+            my_row.children[2].innerText = Number(my_row.children[2].innerText) - 1
+
+            // 相手の勝ち数を加算
+            me_in_opponent.innerText = '○'
+            opponent_row.children[3].innerText = Number(opponent_row.children[3].innerText) - 1;
+            opponent_row.children[2].innerText = Number(opponent_row.children[2].innerText) + 1;
+
+
+          } else {
+            // 自分の負け数は変更しない
+            this.innerText = '○';
+            my_row.children[2].innerText = Number(my_row.children[2].innerText) + 1
+
+            // 相手の勝ち数は変更しない  
+            me_in_opponent.innerText = '●'
+            opponent_row.children[3].innerText = Number(opponent_row.children[3].innerText) + 1;
+
+          }
+          //
+
+
+
+          // thisはli[i]にあたる
+          // this.remove();
+        });
+      };
+
 
       if (info_member != '') {
         alert('対戦表を作成しました。\n' + info_member);
       }
-      document.getElementById("info").scrollIntoView();
+      document.getElementById("info").parentNode.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
 
     }
 
@@ -382,8 +512,9 @@
       }
       document.getElementById('add_row').addEventListener('click', add_row);
       document.getElementById('create_card').addEventListener('click', create_card);
+      document.getElementById('copy_card').addEventListener('click', copy_card);
+      document.getElementById('copy_card_lite').addEventListener('click', copy_card_lite);
       document.getElementById('clear_history').addEventListener('click', clear_history);
-
     };
 
   </script>
