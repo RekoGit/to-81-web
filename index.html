@@ -57,6 +57,11 @@
       border-bottom: solid 2px #EBEBEB
     }
 
+    p {
+      padding-top: 0.6rem;
+      padding-bottom: 0.2rem;
+    }
+
     #card td {
       border: solid 1px #BCBCBC;
     }
@@ -76,12 +81,36 @@
       border-radius: 3px;
     }
 
-    #clear_history {
+    #clear_history,
+    #clear_history_students {
       color: #7a7a7a;
       text-decoration: underline;
       cursor: pointer;
       cursor: url(trash.png);
 
+    }
+
+    .ui-layout-column-8 {
+      width: calc((var(--ui-layout-grid) * 8) + (var(--ui-layout-gutter) * 7));
+    }
+
+    #comb_students td,
+    #card_students td {
+      border: solid 1px #BCBCBC;
+    }
+
+    #comb_students thead td,
+    #card_students thead td {
+      background-color: #EBEBEB;
+    }
+
+    #comb_students tbody td,
+    #card_students tbody td {
+      background-color: #FFFFFF;
+    }
+
+    .text-left {
+      text-align: left;
     }
   </style>
 </head>
@@ -137,14 +166,119 @@
     <section class="ui-section-hero">
       <div class="ui-layout-container">
         <div class="ui-layout-column-6 ui-layout-column-center">
-          <h1>星取表作成</h1>
-          <a class="ui-text-intro">入力された名前に応じて対局カードを作成するだけのページです。入力された内容はブラウザに保存されます。履歴を削除したいときは<span
-              id="clear_history">ここ</span>をクリックしてください。</a>
+          <h1>星取表作成+指導対局⭐️</h1>
+          <p>入力された内容はブラウザに保存されます。<br>履歴を削除したいときは<span id="clear_history_students">ここ</span>をクリックしてください。</p>
         </div>
       </div>
+      <div class="ui-layout-container">
+        <div class="ui-section-testimonial__layout ui-layout-grid ui-layout-grid-3">
+          <div class="ui-layout-column-4">
+            <!-- MEMBERS -->
+            <div class="w-100">
+              <table id="students" class="w-100 text-center">
+                <thead>
+                  <tr>
+                    <th>名前</th>
+                    <th>81アカウント</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <a href="javascript:void(0)" id="apply_card"
+                class="ui-component-button ui-component-button-small ui-component-button-primary">反映</a>
+            </div>
+          </div>
+          <div class="ui-layout-column-8">
+            <span class="ui-text-intro">組み合わせ</span>
+            <table id="comb_students" class="w-100 text-center">
+              <thead>
+                <tr>
+                  <td>指導対局1</td>
+                  <td>指導対局2</td>
+                  <td colspan="2">対局1</td>
+                  <td colspan="2">対局2</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+            <hr>
+            <span class="ui-text-intro">星取表</span>
+            <table id="card_students" class="w-100 text-center">
+              <thead>
+                <tr>
+                  <td>＼</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>勝</td>
+                  <td>負</td>
+                  <td>81dojo</td>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <p class="text-left">RDメモ<br>
+        ・指導対局は1人2回<br>
+        　→1回あたり2名が指導対局なので、1クール全6回<br>
+        ・6名参加の場合、2名は指導対局、4名は生徒同士の対局<br>
+        ・生徒同士は同じ人同士は対局させない<br>
+      </p>
     </section>
 
-    <section class="ui-section-feature">
+
+
+
+
+    <section class="ui-section-hero">
+      <div class="ui-layout-container">
+        <div class="ui-layout-column-6 ui-layout-column-center">
+          <h1>星取表作成</h1>
+          <p>入力された名前に応じて対局カードを作成するだけのページです。入力された内容はブラウザに保存されます。<br>履歴を削除したいときは<span
+              id="clear_history">ここ</span>をクリックしてください。
+          </p>
+        </div>
+      </div>
       <div class="ui-layout-container">
         <div class="ui-section-feature__layout ui-layout-grid ui-layout-grid-2">
           <!-- MEMBERS -->
@@ -192,11 +326,11 @@
 
     <section class="ui-section-testimonial">
       <div class="ui-layout-container">
-        <div class="ui-layout-column-8 ui-layout-column-center">
-          <h2>星取表</h2>
-          <span id="info" class="ui-text-intro">?をクリックして対局結果を入力できます</span>
+        <div class="ui-layout-column-center">
+          <h2 id="info">星取表</h2>
+          <span class="ui-text-intro">?をクリックして対局結果を入力できます</span>
           <div class="ui-layout-flex ui-component-button-small">
-            <span id="info" class="">クリップボードからGoogleSpreadsheetに貼り付ける場合は<br>貼り付け後に[テキストを列に分割]を選択してください。</span>&nbsp;
+            <span class="">クリップボードからGoogleSpreadsheetに貼り付ける場合は<br>貼り付け後に[テキストを列に分割]を選択してください。</span>&nbsp;
             <a href="javascript:void(0)" id="copy_card"
               class="ui-component-button ui-component-button-small ui-component-button-primary">クリップボードにコピー</a>&nbsp;
             <a href="javascript:void(0)" id="copy_card_lite"
@@ -223,13 +357,18 @@
   </footer>
   <script>
     const STORAGE_MEMBERS = 'MEMBERS';
+    const STORAGE_STUDENTS = "STUDENTS";
     const ROUND_TO_BREAK = 'ROUND_TO_BREAK';
+    let body_members = document.querySelector('#members tbody');
+    let head_card = document.querySelector('#card thead');
+    let body_card = document.querySelector('#card tbody');
+
+    let body_students = document.querySelector('#students tbody');
+    let head_card_students = document.querySelector('#card_students thead');
+    let body_card_students = document.querySelector('#card_students tbody');
+
 
     let stored_members = {};
-    let table_members = document.querySelector('#members tbody');
-    let table_head = document.querySelector('#card thead');
-    let table_body = document.querySelector('#card tbody');
-
     const add_row = () => {
       let row = document.createElement('tr');
       let col1 = document.createElement('td');
@@ -242,7 +381,7 @@
       col2.appendChild(rate);
       row.appendChild(col1);
       row.appendChild(col2);
-      table_members.appendChild(row);
+      body_members.appendChild(row);
     }
 
     const add_rows = (num) => {
@@ -311,9 +450,9 @@
       stored_members = {};
 
       // メンバーを読み込み(一行目のタイトルは飛ばす)
-      for (let i = 0; i < table_members.rows.length; i++) {
-        name = table_members.rows[i].children[0].children[0].value;
-        rate = table_members.rows[i].children[1].children[0].value;
+      for (let i = 0; i < body_members.rows.length; i++) {
+        name = body_members.rows[i].children[0].children[0].value;
+        rate = body_members.rows[i].children[1].children[0].value;
 
         if (name == '') {
           // 名前が未入力でもレートが入力されているなら、処理はしないがエラーメッセージは表示する
@@ -390,8 +529,8 @@
       // document.getElementById('info').innerHTML = info_break;
 
       // 星取表を初期化
-      table_head.innerHTML = '';
-      table_body.innerHTML = '';
+      head_card.innerHTML = '';
+      body_card.innerHTML = '';
       let row;
 
       // headerをセット
@@ -401,7 +540,7 @@
         col.innerHTML = val;
         row.appendChild(col);
       });
-      table_head.appendChild(row);
+      head_card.appendChild(row);
 
       // bodyをセット
       let key_id = 'me_';
@@ -422,7 +561,7 @@
             }
             row.appendChild(col);
           });
-          table_body.appendChild(row);
+          body_card.appendChild(row);
         }
       }
 
@@ -491,9 +630,93 @@
     }
 
     const clear_history = () => {
-      table_members.innerHTML = '';
+      body_members.innerHTML = '';
       add_rows(6);
       localStorage.removeItem(STORAGE_MEMBERS);
+    }
+    const clear_history_students = () => {
+      localStorage.removeItem(STORAGE_STUDENTS);
+    }
+
+    // 指導対局用
+    const apply_card = () => {
+      let name = '';
+      let account81 = '';
+
+      let ts = [];
+      let comb_students = document.querySelector('#comb_students tbody');
+
+      // メンバーを読み込み(一行目のタイトルは飛ばす)
+      for (let i = 0; i < body_students.rows.length; i++) {
+        name = body_students.rows[i].children[0].children[0].value;
+        account81 = body_students.rows[i].children[1].children[0].value;
+        ts.push([name, account81]);
+      }
+
+      // 組み合わせテーブルに反映
+      comb_students.innerHTML = '';
+      let row, col;
+
+      // 以下、決め打ちで作成
+      // 指導対局1回目
+      // *16 25 34
+      // *24 15  36
+      // *35 12 46
+
+      // 指導対局2回目
+      // *14 23 56
+      // *26 13 45
+      // *35 14 26 
+      let tss = [];
+      tss.push([ts[0], ts[5], ts[1], ts[4], ts[2], ts[3]]);
+      tss.push([ts[1], ts[3], ts[0], ts[4], ts[2], ts[5]]);
+      tss.push([ts[2], ts[4], ts[0], ts[1], ts[3], ts[5]]);
+      tss.push([ts[0], ts[3], ts[1], ts[2], ts[4], ts[5]]);
+      tss.push([ts[1], ts[5], ts[0], ts[2], ts[3], ts[4]]);
+      tss.push([ts[2], ts[4], ts[0], ts[3], ts[1], ts[5]]);
+
+      tss.forEach(ts => {
+        row = document.createElement('tr');
+        ts.forEach(val => {
+          col = document.createElement('td');
+          col.innerHTML = val[0];
+          row.appendChild(col);
+        });
+        comb_students.appendChild(row);
+      });
+
+      // 星取表テーブルに反映
+      let tds = [];
+      ts.forEach((student, i) => {
+        // head_card_studentsのi+1番目の要素をstudent[0]にする
+        head_card_students.rows[0].children[i + 1].innerText = student[0];
+
+        // tdsに10個の要素で初期化し、0番目の要素をstudent[0]、9番目の要素をstudent[1]、i+1番目の要素を'-'にする
+        tds = Array(10).fill('');
+        tds[0] = student[0];
+        tds[i + 1] = '-';
+        tds[9] = student[1];
+
+        // tdsの要素でtd要素を生成し、rowに追加
+        row = document.createElement('tr');
+        tds.forEach(val => {
+          col = document.createElement('td');
+          col.innerHTML = val;
+          row.appendChild(col);
+        });
+        body_card_students.appendChild(row);
+      })
+
+
+
+
+      // localStorageに一時保存(異なるキーで直前に保存されている可能性があるため、一旦削除してから書き込む)
+      localStorage.removeItem(STORAGE_STUDENTS);
+      // localStorageにtsを保存
+      localStorage.setItem(STORAGE_STUDENTS, JSON.stringify(ts));
+
+
+
     }
 
     window.onload = (event) => {
@@ -503,8 +726,8 @@
         let i = 0;
         for (m in stored_members) {
           add_row();
-          table_members.children[i].children[0].children[0].value = m;
-          table_members.children[i].children[1].children[0].value = stored_members[m];
+          body_members.children[i].children[0].children[0].value = m;
+          body_members.children[i].children[1].children[0].value = stored_members[m];
           i++;
         }
       } else {
@@ -515,6 +738,23 @@
       document.getElementById('copy_card').addEventListener('click', copy_card);
       document.getElementById('copy_card_lite').addEventListener('click', copy_card_lite);
       document.getElementById('clear_history').addEventListener('click', clear_history);
+      document.getElementById('clear_history_students').addEventListener('click', clear_history_students);
+
+      // 指導対局用
+      // STORAGE_STUDENTSを読み込み
+      let storage_students = localStorage.getItem(STORAGE_STUDENTS);
+      if (storage_students !== null) {
+        let students = JSON.parse(storage_students);
+        let i = 0;
+        for (s of students) {
+          body_students.children[i].children[0].children[0].value = s[0];
+          body_students.children[i].children[1].children[0].value = s[1];
+          i++;
+        }
+      }
+
+
+      document.getElementById('apply_card').addEventListener('click', apply_card);
     };
 
   </script>
