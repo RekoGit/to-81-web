@@ -702,13 +702,21 @@
         if (i == 0) {
           tds[6] = '×';
         }
+        if (i == 5) {
+          tds[1] = '×';
+        }
         if (i == 1) {
           tds[4] = '×';
+        }
+        if (i == 3) {
+          tds[2] = '×';
         }
         if (i == 2) {
           tds[5] = '×';
         }
-
+        if (i == 4) {
+          tds[3] = '×';
+        }
 
         // tdsの要素でtd要素を生成し、rowに追加
         row = document.createElement('tr');
