@@ -112,6 +112,10 @@
     .text-left {
       text-align: left;
     }
+
+    .col-even {
+      width: 70px;
+    }
   </style>
 </head>
 
@@ -241,12 +245,12 @@
               <thead>
                 <tr>
                   <td>＼</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td class="col-even"></td>
+                  <td class="col-even"></td>
+                  <td class="col-even"></td>
+                  <td class="col-even"></td>
+                  <td class="col-even"></td>
+                  <td class="col-even"></td>
                   <td>勝</td>
                   <td>負</td>
                   <td>81dojo</td>
@@ -263,6 +267,7 @@
         　→1回あたり2名が指導対局なので、1クール全6回<br>
         ・6名参加の場合、2名は指導対局、4名は生徒同士の対局<br>
         ・生徒同士は同じ人同士は対局させない<br>
+        ・組み合わせに存在しない対局は星取表上、×と表示<br>
       </p>
     </section>
 
@@ -686,6 +691,7 @@
       });
 
       // 星取表テーブルに反映
+      body_card_students.innerHTML = '';
       let tds = [];
       ts.forEach((student, i) => {
         // head_card_studentsのi+1番目の要素をstudent[0]にする
@@ -696,6 +702,18 @@
         tds[0] = student[0];
         tds[i + 1] = '-';
         tds[9] = student[1];
+
+        // 不戦となる0vs5、1vs3、2vs4については、tdsの該当箇所を'不戦'にする
+        if (i == 0) {
+          tds[5] = '×';
+        }
+        if (i == 1) {
+          tds[3] = '×';
+        }
+        if (i == 2) {
+          tds[4] = '×';
+        }
+
 
         // tdsの要素でtd要素を生成し、rowに追加
         row = document.createElement('tr');
