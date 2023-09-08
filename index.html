@@ -270,11 +270,6 @@
         ・組み合わせに存在しない対局は星取表上、×と表示<br>
       </p>
     </section>
-
-
-
-
-
     <section class="ui-section-hero">
       <div class="ui-layout-container">
         <div class="ui-layout-column-6 ui-layout-column-center">
@@ -703,15 +698,15 @@
         tds[i + 1] = '-';
         tds[9] = student[1];
 
-        // 不戦となる0vs5、1vs3、2vs4については、tdsの該当箇所を'不戦'にする
+        // 不戦となる1vs6、2vs4、3vs5については、tdsの該当箇所を'不戦'にする
         if (i == 0) {
-          tds[5] = '×';
+          tds[6] = '×';
         }
         if (i == 1) {
-          tds[3] = '×';
+          tds[4] = '×';
         }
         if (i == 2) {
-          tds[4] = '×';
+          tds[5] = '×';
         }
 
 
